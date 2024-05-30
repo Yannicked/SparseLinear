@@ -429,13 +429,18 @@ class SparseLinear(nn.Module):
                 inputs = inputs.view(1, -1)
             inputs = inputs.flatten(end_dim=-2)
 
-            # output = torch_sparse.spmm(self.indices, self.weights, self.out_features, self.in_features, inputs.t()).t()
-            target = torch.sparse.FloatTensor(
+            target = torch.sparse_coo_tensor(
                 self.indices,
                 self.weights,
                 torch.Size([self.out_features, self.in_features]),
-            ).to_dense()
-            output = torch.mm(target, inputs.t()).t()
+                dtype=inputs.dtype,
+                device=inputs.device,
+            )
+            output = torch.sparse.mm(
+                target,
+                inputs.t(),
+            ).t()
+            # output = torch.mm(target, inputs.t()).t()
 
             if self.bias is not None:
                 output += self.bias
