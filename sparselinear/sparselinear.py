@@ -161,7 +161,7 @@ class GrowConnections(torch.autograd.Function):
 
 
 class SparseLinear(nn.Module):
-    """Applies a linear transformation to the incoming data: :math:`y = xA^T + b`
+    r"""Applies a linear transformation to the incoming data: :math:`y = xA^T + b`
 
     Args:
         in_features: size of each input sample
